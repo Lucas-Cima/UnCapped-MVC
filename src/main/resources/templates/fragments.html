@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:fragment="head">
+    <meta charset="UTF-8"/>
+    <title th:text="${title}">Your list Of beers</title>
+
+
+</head>
+<body>
+
+<nav th:fragment="navigation">
+    <a href="/beer">Home</a> |
+    <a href="beer/check-in">Check-in</a>
+
+</nav>
+
+</body>
+</html>
