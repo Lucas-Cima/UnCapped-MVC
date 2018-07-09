@@ -15,12 +15,14 @@
     <tr>
         <th>Brewery</th>
         <th>Name</th>
+        <th>Style</th>
         <th>Description</th>
     </tr>
 
     <tr th:each="beer : ${beers}">
         <td th:text="${beer.brewery}"></td>
         <td th:text="${beer.name}"></td>
+        <td th:text="${beer.style.name}"></td>
         <td th:text="${beer.description}"></td>
     </tr>
 

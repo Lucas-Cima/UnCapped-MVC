@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.validation.Valid;
 
 @Controller
-@RequestMapping("Style")
+@RequestMapping("style")
 public class StyleController {
 
     @Autowired

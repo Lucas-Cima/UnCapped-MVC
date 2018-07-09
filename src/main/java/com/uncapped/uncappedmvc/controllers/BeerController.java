@@ -12,6 +12,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 
@@ -45,7 +46,7 @@ public class BeerController {
 
     @RequestMapping(value = "check-in", method = RequestMethod.POST)
     public String processCheckInForm(@ModelAttribute @Valid Beer newBeer,
-                                         Errors errors, Model model) {
+                                     Errors errors, Model model, @RequestParam int styleId) {
 
         if (errors.hasErrors()) {
             model.addAttribute("title", "Check in New Beer");
@@ -55,7 +56,7 @@ public class BeerController {
         Style s = styleDao.findOne(styleId);
         newBeer.setStyle(s);
         beerDao.save(newBeer);
-        return "redirect";
+        return "redirect:";
     }
 
 }
