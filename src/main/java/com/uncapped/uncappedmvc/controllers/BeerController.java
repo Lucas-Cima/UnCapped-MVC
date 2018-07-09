@@ -2,7 +2,9 @@ package com.uncapped.uncappedmvc.controllers;
 
 
 import com.uncapped.uncappedmvc.models.Beer;
+import com.uncapped.uncappedmvc.models.Style;
 import com.uncapped.uncappedmvc.models.data.BeerDao;
+import com.uncapped.uncappedmvc.models.data.StyleDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +22,9 @@ public class BeerController {
     @Autowired
     private BeerDao beerDao;
 
+    @Autowired
+    private StyleDao styleDao;
+
 
     @RequestMapping(value= "")
     public String index(Model model) {
@@ -34,6 +39,7 @@ public class BeerController {
     public String displayCheckInForm(Model model) {
         model.addAttribute("title", "Check in New Beer");
         model.addAttribute(new Beer());
+        model.addAttribute("styles", styleDao.findAll());
         return "beer/check-in";
     }
 
@@ -43,8 +49,11 @@ public class BeerController {
 
         if (errors.hasErrors()) {
             model.addAttribute("title", "Check in New Beer");
+            model.addAttribute("styles", styleDao.findAll());
             return "beer/check-in";
         }
+        Style s = styleDao.findOne(styleId);
+        newBeer.setStyle(s);
         beerDao.save(newBeer);
         return "redirect";
     }

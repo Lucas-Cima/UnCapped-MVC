@@ -13,14 +13,14 @@
 <table class="table">
 
     <tr>
-        <th>Name</th>
         <th>Brewery</th>
+        <th>Name</th>
         <th>Description</th>
     </tr>
 
     <tr th:each="beer : ${beers}">
-        <td th:text="${beer.name}"></td>
         <td th:text="${beer.brewery}"></td>
+        <td th:text="${beer.name}"></td>
         <td th:text="${beer.description}"></td>
     </tr>
 
