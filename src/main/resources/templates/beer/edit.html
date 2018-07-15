@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+<body class="container">
+<h1 th:text="${title}">Default Title</h1>
+
+<nav th:replace="fragments :: navigation"></nav>
+
+<form method="post" style="max-width:600px;" th:object="${beer}">
+
+    <div class="form-group">
+        <label th:for="description">Brewery</label>
+        <input class="form-control" th:field="*{brewery}" />
+        <span th:errors="*{brewery}" class="error"></span>
+    </div>
+    <div class="form-group">
+        <label th:for="name">Name</label>
+        <input class="form-control" th:field="*{name}" />
+        <span th:errors="*{name}" class="error"></span>
+    </div>
+    <div class="form-group">
+        <label th:for="type">Style</label>
+        <select th:name="styleId">
+            <option th:each="style : ${styles}"
+                    th:text="${style.name}"
+                    th:value="${style.id}"></option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label th:for="description">Description</label>
+        <input class="form-control" th:field="*{description}" />
+        <span th:errors="*{description}" class="error"></span>
+    </div>
+
+    <input type="submit" value="Confirm Edit" />
+</form>
+
+</body>
+</html>

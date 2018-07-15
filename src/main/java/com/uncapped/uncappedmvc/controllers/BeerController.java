@@ -3,6 +3,7 @@ package com.uncapped.uncappedmvc.controllers;
 
 import com.uncapped.uncappedmvc.models.Beer;
 import com.uncapped.uncappedmvc.models.Style;
+import com.uncapped.uncappedmvc.models.User;
 import com.uncapped.uncappedmvc.models.data.BeerDao;
 import com.uncapped.uncappedmvc.models.data.StyleDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,10 @@ public class BeerController {
 
     @RequestMapping(value= "")
     public String index(Model model) {
-
+        if (username.equals("none")) {
+            return "redirect:/user/login";
+        }
+        User u = userDao.findByUsername(username).get(0);
         model.addAttribute("beers", beerDao.findAll());
         model.addAttribute("title", "My List of Beers");
 
@@ -59,4 +63,28 @@ public class BeerController {
         return "redirect:";
     }
 
+    @RequestMapping(value = "delete", method = RequestMethod.GET)
+    public String displayDeleteBeerForm(Model model) {
+        model.addAttribute("beers", beerDao.findAll());
+        model.addAttribute("title", "Delete Check-In");
+        return "beer/delete";
+    }
+
+    @RequestMapping(value = "delete", method = RequestMethod.POST)
+    public String processDeleteBeerForm(@RequestParam int[] beerIds) {
+        for (int beerId : beerIds) {
+            beerDao.delete(beerId);
+        }
+        return "redirect:";
+
+    }
+
+    //@RequestMapping(value = "edit", method = RequestMethod.GET)
+    //public String displayEditCheckinForm(Model model, @ModelAttribute @Valid Beer newBeer, Errors errors,
+    //                                   @RequestParam int beerId, @RequestParam String beerName, @RequestParam String beerDescription,
+    //                                     @RequestParam String beerBrewery) {
+    //    model.addAttribute("title", "Edit Check-in");
+    //
+    //
+    //}
 }
