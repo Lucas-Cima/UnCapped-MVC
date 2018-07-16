@@ -31,13 +31,15 @@ public class Beer {
     @ManyToOne
     private Style style;
 
+    @ManyToOne
+    private User user;
+
 
 
 
     public Beer(String name, String description) {
         this.name = name;
-        this.description = description;
-    }
+        this.description = description; }
 
     public Beer() { }
 
@@ -73,5 +75,7 @@ public class Beer {
     public Style getStyle() { return style; }
 
     public void setStyle(Style style) { this.style = style; }
+
+    public void setUser(User u) {this.user = u;}
 }
 

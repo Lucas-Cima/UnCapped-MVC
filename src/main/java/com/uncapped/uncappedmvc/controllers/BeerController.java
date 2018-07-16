@@ -6,14 +6,12 @@ import com.uncapped.uncappedmvc.models.Style;
 import com.uncapped.uncappedmvc.models.User;
 import com.uncapped.uncappedmvc.models.data.BeerDao;
 import com.uncapped.uncappedmvc.models.data.StyleDao;
+import com.uncapped.uncappedmvc.models.data.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -27,21 +25,27 @@ public class BeerController {
     @Autowired
     private StyleDao styleDao;
 
+    @Autowired
+    private UserDao userDao;
+
 
     @RequestMapping(value= "")
-    public String index(Model model) {
-        if (username.equals("none")) {
+    public String index(Model model, @CookieValue(value = "user", defaultValue = "none") String username) {
+
+        if(username.equals("none")) {
             return "redirect:/user/login";
         }
         User u = userDao.findByUsername(username).get(0);
-        model.addAttribute("beers", beerDao.findAll());
+        model.addAttribute("beers", u.getBeers());
         model.addAttribute("title", "My List of Beers");
 
         return "beer/index";
     }
 
     @RequestMapping(value = "check-in", method = RequestMethod.GET)
-    public String displayCheckInForm(Model model) {
+    public String displayCheckInForm(Model model, @CookieValue(value = "user", defaultValue = "none") String username) {
+
+        if(username.equals("none")) { return "redirect:/user/login"; }
         model.addAttribute("title", "Check in New Beer");
         model.addAttribute(new Beer());
         model.addAttribute("styles", styleDao.findAll());
@@ -49,9 +53,12 @@ public class BeerController {
     }
 
     @RequestMapping(value = "check-in", method = RequestMethod.POST)
-    public String processCheckInForm(@ModelAttribute @Valid Beer newBeer,
-                                     Errors errors, Model model, @RequestParam int styleId) {
+    public String processCheckInForm(@ModelAttribute @Valid Beer newBeer, Errors errors, Model model,
+                                     @RequestParam int styleId, @CookieValue(value = "user", defaultValue = "none") String username) {
 
+        if(username.equals("none")) { return "redirect:/user/login"; }
+
+        User u = userDao.findByUsername(username).get(0);
         if (errors.hasErrors()) {
             model.addAttribute("title", "Check in New Beer");
             model.addAttribute("styles", styleDao.findAll());
@@ -59,12 +66,15 @@ public class BeerController {
         }
         Style s = styleDao.findOne(styleId);
         newBeer.setStyle(s);
+        newBeer.setUser(u);
         beerDao.save(newBeer);
         return "redirect:";
     }
 
     @RequestMapping(value = "delete", method = RequestMethod.GET)
-    public String displayDeleteBeerForm(Model model) {
+    public String displayDeleteBeerForm(Model model, @CookieValue(value = "user", defaultValue = "none") String username) {
+        if(username.equals("none")) { return "redirect:/user/login"; }
+        User u = userDao.findByUsername(username).get(0);
         model.addAttribute("beers", beerDao.findAll());
         model.addAttribute("title", "Delete Check-In");
         return "beer/delete";
