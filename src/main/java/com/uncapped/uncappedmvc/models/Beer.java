@@ -24,6 +24,8 @@ public class Beer {
     @Size(min=1, max=20)
     private String name;
 
+    private String joe;
+
     @NotNull
     @Size(min=1, message = "I know you have something to say about this...")
     private String description;
